@@ -21,6 +21,7 @@
  * Each subscription listing’s style will match the theme of the subscription service.
  * User can see dots towards the bottom of the screen, indicating which screen the user is on.
  * User can switch from light mode to dark mode.
+ * User can select different filters on the subscription screen. 
 
 ## 2. Screen Archetypes
 
