@@ -13,7 +13,7 @@
 
 ### App Evaluation
 - **Category:** Financial Management
-- **Mobile:** 
+- **Mobile:** This product will be primarily geared towards mobile users, but can also be effectively transferred to a web application (which would require implementing user login functionality). Useful as a mobile app because phones have become peoples' main and easiest-to-access tool, including a tool for managing finances.
 - **Story:** Tracks what subscription services a user is subbed to and helps manage related finances by displaying billing dates/information and also allowing the user to set a budget. 
 - **Market:** For any individual who wishes to organize and manage their subscription finances (realistically people 18 years or older who can purchase their own subscriptions).  - **Habit:** This app could become part of routine financial management. App usage would broadly coincide with billing cycles.
 - **Scope:** No limit to the app's scope. Additional features may be later implemented to improve the user experience and make managing subscriptions even easier (e.g. allow users to subscribe, cancel, and manage subscription settings via the app).
