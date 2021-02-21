@@ -1,10 +1,25 @@
 # *Subbed*
+**Group name:** Subbers
 
+## Table of Contents
+1. [Overview](#Overview)
+1. [Product Spec](#Product-Spec)
+1. [Wireframes](#Wireframes)
+1. [Schema](#Schema)
+
+## Overview
+### Description
 **Subbed** is a subscription tracking app that helps manage what services one is subbed to along with related finances.
 
-**Group name:** Subber
+### App Evaluation
+- **Category:** Financial Management
+- **Mobile:** 
+- **Story:** Tracks what subscription services a user is subbed to and helps manage related finances by displaying billing dates/information and also allowing the user to set a budget. 
+- **Market:** For any individual who wishes to organize and manage their subscription finances (realistically people 18 years or older who can purchase their own subscriptions).  - **Habit:** This app could become part of routine financial management. App usage would broadly coincide with billing cycles.
+- **Scope:** No limit to the app's scope. Additional features may be later implemented to improve the user experience and make managing subscriptions even easier (e.g. allow users to subscribe, cancel, and manage subscription settings via the app).
 
-## 1. User Stories (Required and Optional)
+## Product Spec
+### 1. User Stories (Required and Optional)
 
 **Required Must-have Stories**
 
@@ -29,7 +44,7 @@
   - [ ] Each subscription listing’s style will match the theme of the subscription service. 
   - [ ] Dots towards the bottom of the screen indicate which screen the user is on.
 
-## 2. Screen Archetypes
+### 2. Screen Archetypes
 
 * Main Screen (Dashboard)
    * Users can view and interact with a dashboard (displaying various statistics about the user's subscriptions).
@@ -48,15 +63,13 @@
 
 **Tab Navigation** (Tab to Screen)
 
- * Tab to Main Screen
- * Tab to Subscription Screen
- * Tab to Finance Screen
+ * Main Screen (Dashboard)
+ * Subscription Screen
+ * Finance Screen
 
 **Flow Navigation (swipe)** (Screen to Screen)
 
- * Main Screen
-   * User swipes right: navigate to Subscription Screen
-   * User swipes left: navigate to Finance Screen.
+ * User can swipe left and right to navigate between tabs
 
 **Flow Navigation (widget)** (Screen to Screen)
 
@@ -67,45 +80,53 @@
    * User presses on related widgets to naviagte to Finance Screen
       * Can navigate by tabs or swiping once there
 
-## 4.Wireframe
+## Wireframes
 **Link to our Figma design:** https://www.figma.com/file/keeGWENYi6FWzI1sRuFCbC/Subbed?node-id=0%3A1
 
-<img src="wireframe.png" width=800><br>
+<img src="wireframe2.png" width=800><br>
+
+### [BONUS] Interactive Prototype
+<img src="prototype.gif" width=200>
 
 ## Schema 
 ### Models
 #### Subscription
 
-   | Property      | Type     | Description |
-   | ------------- | -------- | ------------|
-   | objectId      | String   | unique id for the subscription (default field) |
-   | subscriptionName   | String | subscription name |
-   | color         | String     | color of the subscription |
-   | price       | Number   | price of the subscription |
-   | type   | String   | monthly / yearly |
-   | startDate    | DateTime   | date when subscription is created |
+   | Property           | Type     | Description |
+   | ------------------ | -------- | ------------|
+   | objectId           | String   | unique id for the subscription (default field) |
+   | subscriptionName   | String   | subscription name |
+   | theme              | String   | theme color for the subscription |
+   | type               | String   | type of subscription (e.g. monthly / yearly) |
+   | cost               | Number   | cost of the subscription |
+   | startDate          | DateTime | date when subscription began |
+   | createdAt          | DateTime | date when subscription is created (default field) |
+   | updatedAt          | DateTime | date when subscription is last updated (default field) |
    
 ### Networking
 #### List of network requests by screen
-   - Home Feed Screen
+   - Main Screen (Dashboard)
       - (Read/GET) Query all subscriptions
-         ```swift
-        ParseQuery<Sub> query = ParseQuery.getQuery(Sub.class);      
-        query.findInBackground(new FindCallback<Sub>() {
-            @Override
-            public void done(List<Sub> subs, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting subscriptions", e);
-                    return;
-                }
-                for (Sub sub : subs) {
-                    Log.i(TAG, "Sub: " + sub.getName() + ");
-                }
-                allSubs.addAll(subs);
-                adapter.notifyDataSetChanged();
-            }
-        });
-         ```
+          ```
+         ParseQuery<Sub> query = ParseQuery.getQuery(Sub.class);      
+         query.findInBackground((subs, e) -> {
+                 if (e != null) {
+                     Log.e(TAG, "Issue with getting subscriptions", e);
+                     return;
+                 }
+                 for (Sub sub : subs) {
+                     Log.i(TAG, sub.getName() + " subscription retrieved");
+                 }
+                 allSubs.addAll(subs);
+                 adapter.notifyDataSetChanged();
+         });
+         ``` 
+   - Subscription Screen
+      - (Read/GET) Query all subscriptions
       - (Create/POST) Create a new subscription
       - (Delete) Delete an existing subscription
-      - (PUT) Update the subscription
+   - Finance Screen
+      - (Read/GET) Query all subscriptions
+   - Details Screen
+      - (Update/PATCH) Update an existing subscription
+      - (Delete) Delete an existing subscription
