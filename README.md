@@ -2,6 +2,8 @@
 
 **Subbed** is a subscription tracking app that helps manage what services one is subbed to along with related finances.
 
+**Group name:** Subber
+
 ## 1. User Stories (Required and Optional)
 
 **Required Must-have Stories**
