@@ -64,3 +64,10 @@
  * Finance Screen
    * User presses on related widgets to naviagte to Finance Screen
       * Can navigate by tabs or swiping once there
+
+## 4.Wireframe
+**Link to our Figma design:** https://www.figma.com/file/keeGWENYi6FWzI1sRuFCbC/Subbed?node-id=0%3A1
+
+
+
+   
