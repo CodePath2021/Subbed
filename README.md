@@ -68,6 +68,6 @@
 ## 4.Wireframe
 **Link to our Figma design:** https://www.figma.com/file/keeGWENYi6FWzI1sRuFCbC/Subbed?node-id=0%3A1
 
-
+<img src="wireframe.png" width=800><br>
 
    
