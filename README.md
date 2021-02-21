@@ -72,4 +72,40 @@
 
 <img src="wireframe.png" width=800><br>
 
+## Schema 
+### Models
+#### Subscription
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the subscription (default field) |
+   | subscriptionName   | String | subscription name |
+   | color         | String     | color of the subscription |
+   | price       | Number   | price of the subscription |
+   | type   | String   | monthly / yearly |
+   | startDate    | DateTime   | date when subscription is created |
    
+### Networking
+#### List of network requests by screen
+   - Home Feed Screen
+      - (Read/GET) Query all subscriptions
+         ```swift
+        ParseQuery<Sub> query = ParseQuery.getQuery(Sub.class);      
+        query.findInBackground(new FindCallback<Sub>() {
+            @Override
+            public void done(List<Sub> subs, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting subscriptions", e);
+                    return;
+                }
+                for (Sub sub : subs) {
+                    Log.i(TAG, "Sub: " + sub.getName() + ");
+                }
+                allSubs.addAll(subs);
+                adapter.notifyDataSetChanged();
+            }
+        });
+         ```
+      - (Create/POST) Create a new subscription
+      - (Delete) Delete an existing subscription
+      - (PUT) Update the subscription
