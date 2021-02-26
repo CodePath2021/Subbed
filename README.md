@@ -25,8 +25,8 @@
 
   - [ ] Users can: 
       - [ ] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
-      - [ ] Add a subscription.
-      - [ ] View a list of subscriptions.
+      - [x] Add a subscription.
+      - [x] View a list of subscriptions.
       - [ ] View details of each subscription.
       - [ ] Update a subscription.
       - [ ] Delete a subscription.
@@ -130,3 +130,11 @@
    - Details Screen
       - (Update/PATCH) Update an existing subscription
       - (Delete) Delete an existing subscription
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories for sprint 1:
+
+<img src='subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+
+GIF created with [Kap](https://getkap.co/).
