@@ -130,3 +130,11 @@
    - Details Screen
       - (Update/PATCH) Update an existing subscription
       - (Delete) Delete an existing subscription
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories for sprint 1:
+
+<img src='subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+
+GIF created with [Kap](https://getkap.co/).
