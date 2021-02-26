@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context=".AddSubActivity">
+
+
+    <TextView
+        android:id="@+id/sub_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="2dp"
+        android:text="Subscription" />
+
+    <EditText
+        android:id="@+id/etSubscription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sub_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="subscription name..."
+        android:inputType="textPersonName" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/etSubscription"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:background="#E91E63" />
+
+
+    <TextView
+        android:id="@+id/type_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line1"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="29dp"
+        android:text="Type" />
+
+    <RadioGroup
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/type_label"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="4dp">
+
+        <RadioButton
+            android:id="@+id/monthly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly" />
+
+        <RadioButton
+            android:id="@+id/yearly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yearly" />
+
+    </RadioGroup>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/type"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:background="#E91E63" />
+
+    <TextView
+        android:id="@+id/cost_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="31dp"
+        android:text="Cost" />
+
+    <EditText
+        android:id="@+id/etCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cost_label"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="3dp"
+        android:ems="10"
+        android:hint="10.00"
+        android:inputType="textPersonName"/>
+
+    <View
+        android:id="@+id/line3"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/etCost"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:background="#E91E63" />
+
+    <TextView
+        android:id="@+id/date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line3"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="31dp"
+        android:text="Next Billing Date" />
+
+    <EditText
+        android:id="@+id/etDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="1/1/2021"/>
+
+    <Button
+        android:id="@+id/doneBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDate"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="21dp"
+        android:onClick="addNewSub"
+        android:text="Done" />
+</RelativeLayout>
