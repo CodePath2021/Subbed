@@ -25,8 +25,8 @@
 
   - [ ] Users can: 
       - [ ] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
-      - [ ] Add a subscription.
-      - [ ] View a list of subscriptions.
+      - [x] Add a subscription.
+      - [x] View a list of subscriptions.
       - [ ] View details of each subscription.
       - [ ] Update a subscription.
       - [ ] Delete a subscription.
