@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,10 +51,9 @@ public class SubscriptionFragment extends Fragment {
     protected List<Subscription> allSubs;
     private FloatingActionButton addBtn;
 
-    public SubscriptionFragment() {
-        // Required empty public constructor
+    public SubscriptionFragment(List<Subscription> subs) {
+        allSubs = subs;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +65,11 @@ public class SubscriptionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.setTitle("Subscriptions");
+
         rvSubs = view.findViewById(R.id.rvSubs);
         addBtn = view.findViewById(R.id.addBtn);
 

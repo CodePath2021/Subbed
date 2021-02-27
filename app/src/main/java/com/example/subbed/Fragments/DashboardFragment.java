@@ -2,59 +2,51 @@ package com.example.subbed.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.subbed.R;
+import com.example.subbed.Subscription;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.eazegraph.lib.charts.PieChart;
+import org.eazegraph.lib.models.PieModel;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DashboardFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class DashboardFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private BottomNavigationView bottomNavigationView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private CardView cvChart;
+    private PieChart pieChart;
+    private TextView tvChartTotal;
 
-    public DashboardFragment() {
-        // Required empty public constructor
-    }
+    private CardView cvExpensive;
+    private TextView tvExpensiveSub;
+    private TextView tvExpensiveCost;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashBoardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private CardView cvBilling;
+    private TextView tvBillingDate;
+    private TextView tvBillingSub;
+    private TextView tvBillingDue;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    private List<Subscription> allSubs;
+
+    public DashboardFragment(List<Subscription> subs) {
+        allSubs = subs;
     }
 
     @Override
@@ -62,5 +54,98 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.setTitle("Dashboard");
+
+        bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+
+        cvChart = view.findViewById(R.id.cvChart);
+        pieChart = view.findViewById(R.id.piechart);
+        tvChartTotal = view.findViewById(R.id.tvChartTotal);
+
+        cvExpensive = view.findViewById(R.id.cvExpensive);
+        tvExpensiveSub = view.findViewById(R.id.tvExpensiveSub);
+        tvExpensiveCost = view.findViewById(R.id.tvExpensiveCost);
+
+        cvBilling = view.findViewById(R.id.cvBilling);
+        tvBillingDate = view.findViewById(R.id.tvBillingDate);
+        tvBillingSub = view.findViewById(R.id.tvBillingSub);
+        tvBillingDue = view.findViewById(R.id.tvBillingDue);
+
+        setData();
+        cvChart.setOnClickListener(v -> {
+            bottomNavigationView.setSelectedItemId(R.id.action_subscription);
+        });
+        tvChartTotal.setText("Total of " + allSubs.size() + " subscriptions");
+
+        cvExpensive.setOnClickListener(v -> {
+            bottomNavigationView.setSelectedItemId(R.id.action_finance);
+        });
+        Subscription mostExpensiveSub = findMostExpensive(allSubs);
+        tvExpensiveSub.setText(mostExpensiveSub.getName());
+        tvExpensiveCost.setText(mostExpensiveSub.getPrice() + " per month");
+
+        cvBilling.setOnClickListener(v -> {
+            bottomNavigationView.setSelectedItemId(R.id.action_finance);
+        });
+        Subscription nextBillingSub = findNextBillingDate(allSubs);
+        tvBillingDate.setText(nextBillingSub.getDays());
+        tvBillingSub.setText("for " + nextBillingSub.getName());
+        tvBillingDue.setText("Amount Due: " + nextBillingSub.getPrice());
+    }
+
+    private void setData() {
+        for(Subscription sub : allSubs) {
+            // Set the data and color to the pie chart
+            pieChart.addPieSlice(
+                    new PieModel(
+                            sub.getName(),
+                            Float.parseFloat(sub.getPrice().substring(sub.getPrice().indexOf("$") + 1)),
+                            sub.getColor()));
+        }
+        pieChart.startAnimation();
+    }
+
+    private Subscription findMostExpensive(List<Subscription> subs) {
+        Subscription mostExpensiveSub = null;
+        double mostExpensiveCost = 0.0;
+        String priceStr = "";
+        double price = 0;
+
+        for(Subscription sub : subs) {
+            priceStr = sub.getPrice();
+            price = Double.parseDouble(priceStr.substring(priceStr.indexOf("$") + 1));
+            if(price > mostExpensiveCost) {
+                mostExpensiveCost = price;
+                mostExpensiveSub = sub;
+            }
+        }
+
+        return mostExpensiveSub;
+    }
+
+    private Subscription findNextBillingDate(List<Subscription> subs) {
+        Subscription nextBillingSub = null;
+        int nearestBillingDate = 0;
+        String daysStr = "";
+        int days = 0;
+
+        for(Subscription sub : subs) {
+            daysStr = sub.getDays();
+            days = Integer.parseInt(daysStr.substring(0,1));
+            if(days > nearestBillingDate) {
+                nearestBillingDate = days;
+                nextBillingSub = sub;
+            }
+        }
+
+        return nextBillingSub;
     }
 }
