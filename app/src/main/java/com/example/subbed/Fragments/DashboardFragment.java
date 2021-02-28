@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +36,11 @@ public class DashboardFragment extends Fragment {
     private TextView tvChartTotal;
 
     private CardView cvExpensive;
+    private TextView tvExpensiveTitle;
     private TextView tvExpensiveSub;
     private TextView tvExpensiveCost;
+    private Subscription leastExpensiveSub;
+    private Subscription mostExpensiveSub;
 
     private CardView cvBilling;
     private TextView tvBillingDate;
@@ -71,8 +75,11 @@ public class DashboardFragment extends Fragment {
         tvChartTotal = view.findViewById(R.id.tvChartTotal);
 
         cvExpensive = view.findViewById(R.id.cvExpensive);
+        tvExpensiveTitle = view.findViewById(R.id.tvExpensiveTitle);
         tvExpensiveSub = view.findViewById(R.id.tvExpensiveSub);
         tvExpensiveCost = view.findViewById(R.id.tvExpensiveCost);
+        mostExpensiveSub = findMostExpensive(allSubs);
+        leastExpensiveSub = findLeastExpensive(allSubs);
 
         cvBilling = view.findViewById(R.id.cvBilling);
         tvBillingDate = view.findViewById(R.id.tvBillingDate);
@@ -86,11 +93,17 @@ public class DashboardFragment extends Fragment {
         tvChartTotal.setText("Total of " + allSubs.size() + " subscriptions");
 
         cvExpensive.setOnClickListener(v -> {
-            bottomNavigationView.setSelectedItemId(R.id.action_finance);
+            if((tvExpensiveSub.getText()).equals(mostExpensiveSub.getName())) {
+                tvExpensiveTitle.setText("Least Expensive Subscription");
+                tvExpensiveSub.setText(leastExpensiveSub.getName());
+                tvExpensiveCost.setText(leastExpensiveSub.getPrice() + " per month");
+            }
+            else {
+                tvExpensiveTitle.setText("Most Expensive Subscription");
+                tvExpensiveSub.setText(mostExpensiveSub.getName());
+                tvExpensiveCost.setText(mostExpensiveSub.getPrice() + " per month");
+            }
         });
-        Subscription mostExpensiveSub = findMostExpensive(allSubs);
-        tvExpensiveSub.setText(mostExpensiveSub.getName());
-        tvExpensiveCost.setText(mostExpensiveSub.getPrice() + " per month");
 
         cvBilling.setOnClickListener(v -> {
             bottomNavigationView.setSelectedItemId(R.id.action_finance);
@@ -129,6 +142,24 @@ public class DashboardFragment extends Fragment {
         }
 
         return mostExpensiveSub;
+    }
+
+    private Subscription findLeastExpensive(List<Subscription> subs) {
+        Subscription leastExpensiveSub = null;
+        double leastExpensiveCost = Double.MAX_VALUE;
+        String priceStr = "";
+        double price = 0;
+
+        for(Subscription sub : subs) {
+            priceStr = sub.getPrice();
+            price = Double.parseDouble(priceStr.substring(priceStr.indexOf("$") + 1));
+            if(price < leastExpensiveCost) {
+                leastExpensiveCost = price;
+                leastExpensiveSub = sub;
+            }
+        }
+
+        return leastExpensiveSub;
     }
 
     private Subscription findNextBillingDate(List<Subscription> subs) {
