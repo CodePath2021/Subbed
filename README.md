@@ -41,6 +41,7 @@
       - [ ] Select subscription to add from list of available subscriptions.
       - [ ] Switch from light mode to dark mode.
       - [ ] Select different filters on the subscription screen.
+      - [ ] Apply filters to the Subscription Screen
   - [ ] Each subscription listing’s style will match the theme of the subscription service. 
   - [ ] Dots towards the bottom of the screen indicate which screen the user is on.
 
@@ -136,5 +137,6 @@
 Here's a walkthrough of implemented user stories for sprint 1:
 
 <img src='subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+<img src='walkthrough-dashboard1.gif' title='Video Walkthrough Dashboard' width='400' alt='Video Walkthrough Dashboard' />
 
-GIF created with [Kap](https://getkap.co/).
+GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
