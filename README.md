@@ -27,9 +27,9 @@
       - [ ] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
       - [x] Add a subscription.
       - [x] View a list of subscriptions.
-      - [ ] View details of each subscription.
-      - [ ] Update a subscription.
-      - [ ] Delete a subscription.
+      - [x] View details of each subscription.
+      - [x] Update a subscription.
+      - [x] Delete a subscription.
       - [ ] View the next billing date (on the dashboard), along with amount and associated subscription.
 
 **Optional Nice-to-have Stories**
