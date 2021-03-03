@@ -1,146 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    tools:context=".AddSubActivity">
+    android:paddingBottom="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        tools:context=".AddSubActivity">
 
 
-    <TextView
-        android:id="@+id/sub_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="2dp"
-        android:text="Subscription" />
-
-    <EditText
-        android:id="@+id/etSubscription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sub_label"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="subscription name..."
-        android:inputType="textPersonName" />
-
-    <View
-        android:id="@+id/line1"
-        android:layout_width="300dp"
-        android:layout_height="1dp"
-        android:layout_below="@+id/etSubscription"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:background="#E91E63" />
-
-
-    <TextView
-        android:id="@+id/type_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/line1"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="29dp"
-        android:text="Type" />
-
-    <RadioGroup
-        android:id="@+id/type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/type_label"
-        android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="89dp"
-        android:layout_marginTop="4dp">
-
-        <RadioButton
-            android:id="@+id/monthly"
+        <TextView
+            android:id="@+id/sub_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monthly" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="2dp"
+            android:text="Subscription" />
 
-        <RadioButton
-            android:id="@+id/yearly"
+        <EditText
+            android:id="@+id/etSubscription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yearly" />
+            android:layout_below="@+id/sub_label"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:hint="subscription name..."
+            android:inputType="textPersonName" />
 
-    </RadioGroup>
+        <View
+            android:id="@+id/line1"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/etSubscription"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:background="#E91E63" />
 
-    <View
-        android:id="@+id/line2"
-        android:layout_width="300dp"
-        android:layout_height="1dp"
-        android:layout_below="@+id/type"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:background="#E91E63" />
 
-    <TextView
-        android:id="@+id/cost_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/line2"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="31dp"
-        android:text="Cost" />
+        <TextView
+            android:id="@+id/type_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line1"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="20dp"
+            android:text="Type" />
 
-    <EditText
-        android:id="@+id/etCost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cost_label"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="3dp"
-        android:ems="10"
-        android:hint="10.00"
-        android:inputType="textPersonName"/>
+        <RadioGroup
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/type_label"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:layout_marginStart="89dp"
+            android:layout_marginTop="4dp">
 
-    <View
-        android:id="@+id/line3"
-        android:layout_width="300dp"
-        android:layout_height="1dp"
-        android:layout_below="@+id/etCost"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp"
-        android:background="#E91E63" />
+            <RadioButton
+                android:id="@+id/monthly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Monthly" />
 
-    <TextView
-        android:id="@+id/date_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/line3"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="31dp"
-        android:text="Next Billing Date" />
+            <RadioButton
+                android:id="@+id/yearly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Yearly" />
 
-    <EditText
-        android:id="@+id/etDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/date_label"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:inputType="date"
-        android:hint="1/1/2021"/>
+        </RadioGroup>
 
-    <Button
-        android:id="@+id/doneBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etDate"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="21dp"
-        android:onClick="addNewSub"
-        android:text="Done" />
-</RelativeLayout>
+        <View
+            android:id="@+id/line2"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/type"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:background="#E91E63" />
+
+        <TextView
+            android:id="@+id/cost_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line2"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="20dp"
+            android:text="Cost" />
+
+        <EditText
+            android:id="@+id/etCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cost_label"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="3dp"
+            android:ems="10"
+            android:hint="10.00"
+            android:inputType="numberDecimal" />
+
+        <View
+            android:id="@+id/line3"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/etCost"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:background="#E91E63" />
+
+        <TextView
+            android:id="@+id/date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line3"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="20dp"
+            android:text="Next Billing Date" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date_label"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:hint="Select a date"/>
+
+        <View
+            android:id="@+id/line4"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tvDate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:background="#E91E63" />
+
+        <TextView
+            android:id="@+id/color_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line4"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="20dp"
+            android:text="Pick a color" />
+
+        <Button
+            android:id="@+id/colorBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/color_label"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:text="Pick a color"/>
+
+        <View
+            android:id="@+id/line5"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/colorBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:background="#E91E63" />
+
+        <Button
+            android:id="@+id/doneBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line5"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="addNewSub"
+            android:text="Done" />
+    </RelativeLayout>
+
+</ScrollView>

@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,7 +38,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import java.io.Serializable;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,15 +66,13 @@ public class SubscriptionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // set the title of the action bar
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         ActionBar actionBar = activity.getSupportActionBar();
         actionBar.setTitle("Subscriptions");
 
         rvSubs = view.findViewById(R.id.rvSubs);
         addBtn = view.findViewById(R.id.addBtn);
-
-//        allSubs = new ArrayList<>();
-        loadItems();
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +82,7 @@ public class SubscriptionFragment extends Fragment {
             }
         });
 
-        adapter = new SubsAdapter(getContext(), allSubs);
+        adapter = new SubsAdapter(getContext(), allSubs, this);
 
         // steps to use the recycler view:
         // 0. create layout for one row in the list
@@ -94,49 +92,68 @@ public class SubscriptionFragment extends Fragment {
         rvSubs.setAdapter(adapter);
         // 4. set the layout manager on the recycler view
         rvSubs.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // attach the itemTouchHelper to the recycler view
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvSubs);
     }
 
+    /**
+     * This function is called when we come back from AddSubActivity or DetailActivity
+     * @param requestCode - 1 for AddSub, 2 for Detail
+     * @param resultCode - 1 for AddSub, 2 for Detail
+     * @param data - the data that is sent back from AddSubActivity or DetailActivity
+     */
     @Override
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            Subscription new_sub;
-            new_sub = Parcels.unwrap(data.getParcelableExtra("A new subscription"));
-            allSubs.add(new_sub);
+        Subscription sub;
+
+        // coming back from the AddSubActivity
+        if (requestCode == 1 && data != null) {
+            sub = Parcels.unwrap(data.getParcelableExtra("A new subscription"));
+            allSubs.add(sub);
             adapter.notifyDataSetChanged();
-            saveItems();
+        }
+
+        // coming back from the DetailActivity
+        else if (requestCode == 2 && data != null) {
+            sub = Parcels.unwrap(data.getParcelableExtra("Update subscription"));
+            for (int i = 0; i < allSubs.size(); i++) {
+                Subscription curr_sub = allSubs.get(i);
+                // find the sub that has been modified, update its attribute in the recycler view
+                if (curr_sub.getName().equals(sub.getName())) {
+                    curr_sub.setPrice(sub.getPrice());
+                    curr_sub.setType(sub.getType());
+                    curr_sub.setNextBillingDate(sub.getNext_billing_year(),
+                            sub.getNext_billing_month(), sub.getNext_billing_day());
+                    curr_sub.setColor(sub.getColor());
+                }
+            }
+            adapter.notifyDataSetChanged();
         }
     }
 
-//    private File getDataFile(){
-//        return new File(getContext().getFilesDir(), "subs");
-//    }
-
-    // This function will load items by reading every line of the data file
-    private void loadItems() {
-        try {
-            FileInputStream fis = getContext().openFileInput("subs");
-            ObjectInputStream is = new ObjectInputStream(fis);
-            allSubs = (List<Subscription>) is.readObject();
-            is.close();
-            fis.close();
-        } catch (IOException | ClassNotFoundException e) {
-            Log.e("MainActivity", "Error reading items", e);
-            allSubs = new ArrayList<>();
+    // Swipe left or right to delete an item from the recycler view
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
         }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            allSubs.remove(viewHolder.getAdapterPosition());
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+    /**
+     * We can use this method to send the updated subs back to MainActivity for uses on other screens
+     * @return allSubs
+     */
+    public List<Subscription> sendUpdatedSubs() {
+        return allSubs;
     }
 
-    // This function saves items by writing them into the data file
-    private void saveItems() {
-        try {
-            FileOutputStream fos = getContext().openFileOutput("subs", Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(allSubs);
-            os.close();
-            fos.close();
-        } catch (IOException e) {
-            Log.e("MainActivity", "Error writing items", e);
-        }
-    }
 }

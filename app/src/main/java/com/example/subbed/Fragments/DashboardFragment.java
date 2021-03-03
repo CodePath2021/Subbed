@@ -29,6 +29,7 @@ import java.util.List;
  */
 public class DashboardFragment extends Fragment {
 
+    private static final String TAG = "DashboardFragment";
     private BottomNavigationView bottomNavigationView;
 
     private CardView cvChart;
@@ -109,7 +110,7 @@ public class DashboardFragment extends Fragment {
             bottomNavigationView.setSelectedItemId(R.id.action_finance);
         });
         Subscription nextBillingSub = findNextBillingDate(allSubs);
-        tvBillingDate.setText(nextBillingSub.getDays());
+        tvBillingDate.setText(nextBillingSub.computeRemainingDays() + " Days");
         tvBillingSub.setText("for " + nextBillingSub.getName());
         tvBillingDue.setText("Amount Due: " + nextBillingSub.getPrice());
     }
@@ -120,7 +121,7 @@ public class DashboardFragment extends Fragment {
             pieChart.addPieSlice(
                     new PieModel(
                             sub.getName(),
-                            Float.parseFloat(sub.getPrice().substring(sub.getPrice().indexOf("$") + 1)),
+                            (float) sub.getPrice(),
                             sub.getColor()));
         }
         pieChart.startAnimation();
@@ -129,30 +130,25 @@ public class DashboardFragment extends Fragment {
     private Subscription findMostExpensive(List<Subscription> subs) {
         Subscription mostExpensiveSub = null;
         double mostExpensiveCost = 0.0;
-        String priceStr = "";
-        double price = 0;
+        double price;
 
         for(Subscription sub : subs) {
-            priceStr = sub.getPrice();
-            price = Double.parseDouble(priceStr.substring(priceStr.indexOf("$") + 1));
+            price = sub.getPrice();
             if(price > mostExpensiveCost) {
                 mostExpensiveCost = price;
                 mostExpensiveSub = sub;
             }
         }
-
         return mostExpensiveSub;
     }
 
     private Subscription findLeastExpensive(List<Subscription> subs) {
         Subscription leastExpensiveSub = null;
         double leastExpensiveCost = Double.MAX_VALUE;
-        String priceStr = "";
-        double price = 0;
+        double price;
 
         for(Subscription sub : subs) {
-            priceStr = sub.getPrice();
-            price = Double.parseDouble(priceStr.substring(priceStr.indexOf("$") + 1));
+            price = sub.getPrice();
             if(price < leastExpensiveCost) {
                 leastExpensiveCost = price;
                 leastExpensiveSub = sub;
@@ -165,12 +161,10 @@ public class DashboardFragment extends Fragment {
     private Subscription findNextBillingDate(List<Subscription> subs) {
         Subscription nextBillingSub = null;
         int nearestBillingDate = 0;
-        String daysStr = "";
-        int days = 0;
+        int days;
 
         for(Subscription sub : subs) {
-            daysStr = sub.getDays();
-            days = Integer.parseInt(daysStr.substring(0,1));
+            days = sub.computeRemainingDays();
             if(days > nearestBillingDate) {
                 nearestBillingDate = days;
                 nextBillingSub = sub;

@@ -41,10 +41,14 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${appCompatVersion}"
     implementation "com.google.android.material:material:${designSupportVersion}"
 
+    // parceler library
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'
 
+    // joda library, to get dates
     implementation 'net.danlew:android.joda:2.10.9.1'
+
+    // File IO library
     implementation 'commons-io:commons-io:2.6'
 
     // For Card view
@@ -53,4 +57,7 @@ dependencies {
     // Chart and graph library
     implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
+
+    // For Color picker
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
 }
