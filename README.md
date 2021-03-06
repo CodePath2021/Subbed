@@ -137,7 +137,7 @@
 Here's a walkthrough of implemented user stories for sprint 1:
 
 <img src='subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
-<img src='walkthrough-dashboard1.gif' title='Video Walkthrough Dashboard' width='400' alt='Video Walkthrough Dashboard' />
+<img src='walkthrough-dashboard1.gif' title='Video Walkthrough S1' width='400' alt='Video Walkthrough Dashboard S1' />
 
 GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
 
@@ -145,5 +145,7 @@ GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/
 Here's a walkthrough of implemented user stories for sprint 2:
 
 <img src='subbed_sprint2_2.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+
+<img src='walkthrough-sprint2.gif' title='Video Walkthrough S2' width='400' alt='Video Walkthrough S2' />
 
 GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
