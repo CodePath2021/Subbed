@@ -1,10 +1,7 @@
 package com.example.subbed.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-//import android.os.FileUtils;
-import org.apache.commons.io.FileUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,17 +22,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.parceler.Parcels;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import java.io.Serializable;
+//import android.os.FileUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,11 +52,6 @@ public class SubscriptionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // set the title of the action bar
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        ActionBar actionBar = activity.getSupportActionBar();
-        actionBar.setTitle("Subscriptions");
 
         rvSubs = view.findViewById(R.id.rvSubs);
         addBtn = view.findViewById(R.id.addBtn);
@@ -125,8 +107,8 @@ public class SubscriptionFragment extends Fragment {
                 if (curr_sub.getName().equals(sub.getName())) {
                     curr_sub.setPrice(sub.getPrice());
                     curr_sub.setType(sub.getType());
-                    curr_sub.setNextBillingDate(sub.getNext_billing_year(),
-                            sub.getNext_billing_month(), sub.getNext_billing_day());
+                    curr_sub.setNextBillingDate(sub.getNextBillingYear(),
+                            sub.getNextBillingMonth(), sub.getNextBillingDay());
                     curr_sub.setColor(sub.getColor());
                 }
             }
@@ -143,16 +125,27 @@ public class SubscriptionFragment extends Fragment {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            deleteSubscription(allSubs.get(viewHolder.getAdapterPosition()));
             allSubs.remove(viewHolder.getAdapterPosition());
             adapter.notifyDataSetChanged();
         }
     };
 
+    private void deleteSubscription(Subscription sub) {
+        sub.deleteInBackground(e -> {
+            if(e != null) {
+                Log.e(TAG, "Error while deleting", e);
+                // TODO: error handling
+            }
+            Log.d(TAG, "Subscription delete was successful!");
+        });
+    }
+
     /**
      * We can use this method to send the updated subs back to MainActivity for uses on other screens
      * @return allSubs
      */
-    public List<Subscription> sendUpdatedSubs() {
+    public List<Subscription> getUpdatedSubs() {
         return allSubs;
     }
 

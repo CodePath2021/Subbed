@@ -19,6 +19,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -94,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // For now, the user can edit color in whatever situation
         colorBtn = findViewById(R.id.colorBtn);
-        mDefaultColor = sub.getColor();
+        mDefaultColor = Color.parseColor(sub.getColor());
         colorBtn.setBackgroundColor(mDefaultColor);
         colorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +120,7 @@ public class DetailActivity extends AppCompatActivity {
                 mDefaultColor = color;
                 colorBtn.setBackgroundColor(mDefaultColor);
                 // update the subscription's color and the updated boolean
-                sub.setColor(mDefaultColor);
+                sub.setColor(String.format("#%06X", (0xFFFFFF & mDefaultColor)));
                 updated = true;
             }
         });
@@ -158,7 +161,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DatePickerDialog dialog = new DatePickerDialog(DetailActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
-                        sub.getNext_billing_year(), sub.getNext_billing_month()-1, sub.getNext_billing_day());
+                        sub.getNextBillingYear(), sub.getNextBillingMonth()-1, sub.getNextBillingDay());
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -254,8 +257,21 @@ public class DetailActivity extends AppCompatActivity {
             // send the updated subscription back to the fragment
             Intent replyIntent = new Intent();
             replyIntent.putExtra("Update subscription", Parcels.wrap(sub));
+            updateSubscription(sub);
             setResult(2, replyIntent);
         }
+    }
+
+    private void updateSubscription(Subscription sub) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        sub.setUser(currentUser);
+        sub.saveInBackground(e -> {
+            if(e != null) {
+                Log.e(TAG, "Error while updating", e);
+                // TODO: error handling
+            }
+            Log.d(TAG, "Subscription update was successful!");
+        });
     }
 
     // TODO: A problem - using the exit button at the bottom left won't update the subscription

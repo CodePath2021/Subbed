@@ -97,10 +97,12 @@
                 <TextView
                     android:id="@+id/tvExpensiveSub"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120dp"
+                    android:autoSizeTextType="uniform"
+                    android:paddingLeft="16dp"
                     android:paddingTop="20dp"
+                    android:paddingRight="16dp"
                     android:paddingBottom="20dp"
-                    android:text="Spotify"
                     android:textAlignment="center"
                     android:textSize="60sp" />
 
@@ -109,7 +111,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="20dp"
-                    android:text="$9.99 per month"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textSize="24sp"
@@ -155,7 +156,6 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:text="5 days"
                     android:textAlignment="center"
                     android:textSize="60sp" />
 
@@ -164,9 +164,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
-                    android:text="for Spotify"
                     android:textAlignment="center"
-                    android:textAllCaps="false"
+                    android:textAllCaps="true"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -174,9 +173,9 @@
                     android:id="@+id/tvBillingDue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Amount Due: $9.99"
+                    android:text="Amount Due:"
                     android:textAlignment="center"
-                    android:textAllCaps="true"
+                    android:textAllCaps="false"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

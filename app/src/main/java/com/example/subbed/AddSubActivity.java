@@ -18,6 +18,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.parceler.Parcels;
@@ -99,7 +103,7 @@ public class AddSubActivity extends AppCompatActivity {
      * Open the color picker
      */
     public void openColorPicker() {
-        AmbilWarnaDialog colorPicker =new AmbilWarnaDialog(this, mDefaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, mDefaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog) { }
 
@@ -165,13 +169,26 @@ public class AddSubActivity extends AppCompatActivity {
         new_sub.setName(etSubscription.getText().toString());
         new_sub.setType(type);
         new_sub.setPrice(Double.parseDouble(etCost.getText().toString()));
-        new_sub.setColor(mDefaultColor);
+        new_sub.setColor(String.format("#%06X", (0xFFFFFF & mDefaultColor))); // convert to hex String
         new_sub.setNextBillingDate(next_billing_year, next_billing_month, next_billing_day);
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra("A new subscription", Parcels.wrap(new_sub));
+        saveSubscription(new_sub);
         setResult(RESULT_OK, replyIntent);
         finish();
+    }
+
+    private void saveSubscription(Subscription new_sub) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        new_sub.setUser(currentUser);
+        new_sub.saveInBackground(e -> {
+            if(e != null) {
+                Log.e(TAG, "Error while saving", e);
+                // TODO: error handling
+            }
+            Log.d(TAG, "Subscription save was successful!");
+        });
     }
 
     /**

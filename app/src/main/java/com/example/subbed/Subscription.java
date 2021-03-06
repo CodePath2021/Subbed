@@ -1,62 +1,88 @@
 package com.example.subbed;
 
-import android.graphics.Color;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.parceler.Parcel;
 
-import java.io.Serializable;
+@ParseClassName("Subscription")
+public class Subscription extends ParseObject {
 
-@Parcel
-public class Subscription implements Serializable {
+    public static final String KEY_NAME = "name";
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_PRICE = "price";
+    public static final String KEY_COLOR = "color";
+    public static final String KEY_YEAR = "nextBillingYear";
+    public static final String KEY_MONTH = "nextBillingMonth";
+    public static final String KEY_DAY = "nextBillingDay";
+    public static final String KEY_USER = "user";
 
-    // subscription attributes
-    String name;
-    String type;
-    double price;
-    int color;
-
-    int next_billing_year;
-    int next_billing_month;
-    int next_billing_day;
-
-    // An empty constructor
-    public Subscription() {
+    public String getName() {
+        return getString(KEY_NAME);
     }
 
-    // constructor with parameters for testing purpose!
-    public Subscription(String name, String type, double price, int color) {
-        this.name = name;
-        this.type = type;
-        this.price = price;
-        this.color = color;
-
-        // hardcoded for testing purpose!
-        next_billing_year = 2021;
-        next_billing_month = 4;
-        next_billing_day = 5;
+    public void setName(String name) {
+        put(KEY_NAME, name);
     }
 
-    public String getName() { return name; }
     public String getType() {
-        return type;
+        return getString(KEY_TYPE);
     }
+
+    public void setType(String type) {
+        put(KEY_TYPE, type);
+    }
+
     public double getPrice() {
-        return price;
+        Number price = getNumber(KEY_PRICE);
+        if(price instanceof Double)
+            return (double)price;
+        else
+            return (double)price.intValue();
     }
-    public int getColor() { return color; }
-    public int getNext_billing_day() {
-        return next_billing_day;
+
+    public void setPrice(double price) {
+        put(KEY_PRICE, price);
     }
-    public int getNext_billing_month() {
-        return next_billing_month;
+
+    public String getColor() { return getString(KEY_COLOR); }
+
+    public void setColor(String color) {
+        put(KEY_COLOR, color);
     }
-    public int getNext_billing_year() {
-        return next_billing_year;
+
+    public int getNextBillingYear() {
+        return (int)getNumber(KEY_YEAR);
+    }
+
+    public void setNextBillingYear(int year) {
+        put(KEY_YEAR, year);
+    }
+
+    public int getNextBillingMonth() {
+        return (int)getNumber(KEY_MONTH);
+    }
+
+    public void setNextBillingMonth(int month) {
+        put(KEY_MONTH, month);
+    }
+
+    public int getNextBillingDay() {
+        return (int)getNumber(KEY_DAY);
+    }
+
+    public void setNextBillingDay(int day) {
+        put(KEY_DAY, day);
+    }
+
+    public ParseUser getUser() {
+        return getParseUser(KEY_USER);
+    }
+
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
     }
 
     /**
@@ -64,18 +90,7 @@ public class Subscription implements Serializable {
      * @return
      */
     public String getNextBillingDate() {
-        return next_billing_month + "/" + next_billing_day + "/" + next_billing_year;
-    }
-
-    /**
-     * Compute the days remaining before the next billing date
-     * @return int
-     */
-    public int computeRemainingDays() {
-        DateTime today = new DateTime();
-        DateTime next_billing_date = today.withYear(next_billing_year)
-                .withMonthOfYear(next_billing_month).withDayOfMonth(next_billing_day);
-        return Days.daysBetween(today, next_billing_date).getDays();
+        return getNextBillingMonth() + "/" + getNextBillingMonth() + "/" + getNextBillingYear();
     }
 
     /**
@@ -85,22 +100,19 @@ public class Subscription implements Serializable {
      * @param day - next billing day of month
      */
     public void setNextBillingDate(int year, int month, int day) {
-        next_billing_year = year;
-        next_billing_month = month;
-        next_billing_day = day;
+        setNextBillingYear(year);
+        setNextBillingMonth(month);
+        setNextBillingDay(day);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * Compute the days remaining before the next billing date
+     * @return int
+     */
+    public int computeRemainingDays() {
+        DateTime today = new DateTime();
+        DateTime next_billing_date = today.withYear(getNextBillingYear())
+                .withMonthOfYear(getNextBillingMonth()).withDayOfMonth(getNextBillingDay());
+        return Days.daysBetween(today, next_billing_date).getDays();
     }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setColor(int color) { this.color = color; }
 }

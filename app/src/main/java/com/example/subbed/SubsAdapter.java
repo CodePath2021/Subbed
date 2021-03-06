@@ -74,8 +74,7 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
             tvPrice.setText("$" + sub.getPrice());
             tvDays.setText(sub.computeRemainingDays() + " Days");
 
-            // turn the color integer into the hex string
-            String hexColor = String.format("#%06X", (0xFFFFFF & sub.getColor()));
+            String hexColor = sub.getColor();
             card.setCardBackgroundColor(Color.parseColor(hexColor));
 
             // set the clicker on each item in the recycler view
