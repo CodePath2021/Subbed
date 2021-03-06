@@ -23,14 +23,14 @@
 
 **Required Must-have Stories**
 
-  - [ ] Users can: 
-      - [ ] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
+  - [x] Users can: 
+      - [x] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
       - [x] Add a subscription.
       - [x] View a list of subscriptions.
       - [x] View details of each subscription.
       - [x] Update a subscription.
       - [x] Delete a subscription.
-      - [ ] View the next billing date (on the dashboard), along with amount and associated subscription.
+      - [x] View the next billing date (on the dashboard), along with amount and associated subscription.
 
 **Optional Nice-to-have Stories**
 
@@ -43,7 +43,7 @@
       - [ ] Select different filters on the subscription screen.
       - [ ] Apply filters to the Subscription Screen
   - [ ] Each subscription listing’s style will match the theme of the subscription service. 
-  - [ ] Dots towards the bottom of the screen indicate which screen the user is on.
+  - [x] Dots towards the bottom of the screen indicate which screen the user is on.
 
 ### 2. Screen Archetypes
 
