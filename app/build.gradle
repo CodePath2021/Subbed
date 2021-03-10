@@ -67,4 +67,8 @@ dependencies {
 
     // For navigation dots
     implementation 'com.matthew-tamlin:sliding-intro-screen:3.2.0'
+
+    // For icon-dialog
+    implementation "com.maltaisn:icondialog:3.3.0"
+    implementation "com.maltaisn:iconpack-default:1.0.0"
 }

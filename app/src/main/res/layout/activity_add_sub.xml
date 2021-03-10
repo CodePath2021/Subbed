@@ -167,7 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/color_label"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"
             android:text="Pick a color"/>
 
@@ -180,11 +180,57 @@
             android:layout_marginTop="23dp"
             android:background="#E91E63" />
 
+        <TextView
+            android:id="@+id/icon_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line5"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="20dp"
+            android:text="Pick an icon" />
+
+        <LinearLayout
+            android:id="@+id/icon_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/icon_label"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/iconBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick an icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="20dp"/>
+
+            <ImageView
+                android:id="@+id/iconImg"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_launcher_foreground"/>
+
+        </LinearLayout>
+
+
+
+        <View
+            android:id="@+id/line6"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/icon_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:background="#E91E63" />
+
         <Button
             android:id="@+id/doneBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/line5"
+            android:layout_below="@+id/line6"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="18dp"
             android:layout_marginEnd="21dp"

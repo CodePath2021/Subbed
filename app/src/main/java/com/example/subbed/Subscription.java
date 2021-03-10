@@ -1,5 +1,11 @@
 package com.example.subbed;
 
+import android.graphics.drawable.Icon;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -18,6 +24,7 @@ public class Subscription extends ParseObject {
     public static final String KEY_MONTH = "nextBillingMonth";
     public static final String KEY_DAY = "nextBillingDay";
     public static final String KEY_USER = "user";
+    public static final String KEY_ICON = "icon";
 
     public String getName() {
         return getString(KEY_NAME);
@@ -85,12 +92,20 @@ public class Subscription extends ParseObject {
         put(KEY_USER, user);
     }
 
+    public int getIconId() {
+        return (int)getNumber(KEY_ICON);
+    }
+
+    public void setIconId(int icon) {
+        put(KEY_ICON, icon);
+    }
+
     /**
      * Get a String representation of the next billing date
      * @return
      */
     public String getNextBillingDate() {
-        return getNextBillingMonth() + "/" + getNextBillingMonth() + "/" + getNextBillingYear();
+        return getNextBillingMonth() + "/" + getNextBillingDay() + "/" + getNextBillingYear();
     }
 
     /**
@@ -113,6 +128,36 @@ public class Subscription extends ParseObject {
         DateTime today = new DateTime();
         DateTime next_billing_date = today.withYear(getNextBillingYear())
                 .withMonthOfYear(getNextBillingMonth()).withDayOfMonth(getNextBillingDay());
-        return Days.daysBetween(today, next_billing_date).getDays();
+
+        int result = Days.daysBetween(today, next_billing_date).getDays();
+
+        // if remaining days is 0, will set the new next billing dates and recompute remaining days
+        if (result == 0) {
+
+            // monthly type
+            if (getType().equals("Monthly")) {
+                // if the current month is December, need to increment the year, set the month to be January
+                if (getNextBillingMonth() == 12) {
+                    setNextBillingYear(getNextBillingYear() + 1);
+                    setNextBillingMonth(1);
+                }
+                // in other cases, simply increment the month by 1
+                // Don't need to dive much into the calculation details cuz the benefit is pretty marginal
+                else {
+                    setNextBillingMonth(getNextBillingMonth() + 1);
+                    // compute remaining days again with the new next billing date
+                    next_billing_date = today.withYear(getNextBillingYear())
+                            .withMonthOfYear(getNextBillingMonth()).withDayOfMonth(getNextBillingDay());
+                    result = Days.daysBetween(today, next_billing_date).getDays();
+                }
+            } else if (getType().equals("Yearly")) {
+                setNextBillingYear(getNextBillingYear() + 1);
+                // compute remaining days again with the new next billing date
+                next_billing_date = today.withYear(getNextBillingYear())
+                        .withMonthOfYear(getNextBillingMonth()).withDayOfMonth(getNextBillingDay());
+                result = Days.daysBetween(today, next_billing_date).getDays();
+            }
+        }
+        return result;
     }
 }

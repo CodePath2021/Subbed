@@ -1,16 +1,24 @@
 package com.example.subbed.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,12 +27,16 @@ import com.example.subbed.R;
 import com.example.subbed.SubsAdapter;
 import com.example.subbed.Subscription;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-//import android.os.FileUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,11 +45,19 @@ public class SubscriptionFragment extends Fragment {
 
     public static final String TAG = "SubscriptionFragment";
 
+    // instances for recycler view
     private RecyclerView rvSubs;
     protected SubsAdapter adapter;
     protected List<Subscription> allSubs;
-    private FloatingActionButton addBtn;
 
+    // other stuff
+    private FloatingActionButton addBtn;
+    SubsAdapter.OnLongClickListener onLongClickListener;
+
+    /**
+     * Constructor for the subscription fragment
+     * @param subs - the global subscription list
+     */
     public SubscriptionFragment(List<Subscription> subs) {
         allSubs = subs;
     }
@@ -53,9 +73,11 @@ public class SubscriptionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         rvSubs = view.findViewById(R.id.rvSubs);
         addBtn = view.findViewById(R.id.addBtn);
-
+        // add a new subscription
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +86,31 @@ public class SubscriptionFragment extends Fragment {
             }
         });
 
-        adapter = new SubsAdapter(getContext(), allSubs, this);
+        // attach the onLongClickListener to the adapter: long click to delete a subscription
+        onLongClickListener =  new SubsAdapter.OnLongClickListener() {
+            @Override
+            public void onItemLongClicked(int position) {
+                // ask for users' confirmation
+                new AlertDialog.Builder(getContext())
+                        .setIcon(android.R.drawable.ic_delete)
+                        .setTitle("Are you sure?")
+                        .setMessage("Do you want to delete this item?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // notify the backend
+                                deleteSubscription(allSubs.get(position));
+                                // delete the item from the model
+                                allSubs.remove(position);
+                                // notify the adapter
+                                adapter.notifyItemRemoved(position);
+                            }
+                        })
+                        .setNegativeButton("No", null).show();
+            }
+        };
+
+        adapter = new SubsAdapter(getContext(), allSubs, this, onLongClickListener);
 
         // steps to use the recycler view:
         // 0. create layout for one row in the list
@@ -74,10 +120,38 @@ public class SubscriptionFragment extends Fragment {
         rvSubs.setAdapter(adapter);
         // 4. set the layout manager on the recycler view
         rvSubs.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // attach the itemTouchHelper to the recycler view
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvSubs);
     }
+
+    /**
+     * Menu bar
+     * @param menu
+     * @param inflater
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // Inflate the menu; this adds items to the action bar.
+        inflater.inflate(R.menu.menu_subscription, menu);
+        // find the search icon
+        MenuItem searchItem = menu.findItem(R.id.search_icon);
+        // initialize the search view
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        // remove the little search icon at the bottom right of the phone keyboard
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+
 
     /**
      * This function is called when we come back from AddSubActivity or DetailActivity
@@ -94,6 +168,7 @@ public class SubscriptionFragment extends Fragment {
         // coming back from the AddSubActivity
         if (requestCode == 1 && data != null) {
             sub = Parcels.unwrap(data.getParcelableExtra("A new subscription"));
+            saveSubscription(sub);
             allSubs.add(sub);
             adapter.notifyDataSetChanged();
         }
@@ -110,28 +185,30 @@ public class SubscriptionFragment extends Fragment {
                     curr_sub.setNextBillingDate(sub.getNextBillingYear(),
                             sub.getNextBillingMonth(), sub.getNextBillingDay());
                     curr_sub.setColor(sub.getColor());
+                    curr_sub.setIconId(sub.getIconId());
+                    updateSubscription(curr_sub);
                 }
             }
             adapter.notifyDataSetChanged();
         }
     }
 
-    // Swipe left or right to delete an item from the recycler view
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
+    // All the interactions with the parse backend: create, delete, update
 
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            deleteSubscription(allSubs.get(viewHolder.getAdapterPosition()));
-            allSubs.remove(viewHolder.getAdapterPosition());
-            adapter.notifyDataSetChanged();
-        }
-    };
+    private void saveSubscription(Subscription new_sub) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        new_sub.setUser(currentUser);
+        new_sub.saveInBackground(e -> {
+            if(e != null) {
+                Log.e(TAG, "Error while saving", e);
+                // TODO: error handling
+            }
+            Log.d(TAG, "Subscription save was successful!");
+        });
+    }
 
     private void deleteSubscription(Subscription sub) {
+        Log.i(TAG, "object ID: " + sub.getObjectId());
         sub.deleteInBackground(e -> {
             if(e != null) {
                 Log.e(TAG, "Error while deleting", e);
@@ -141,12 +218,120 @@ public class SubscriptionFragment extends Fragment {
         });
     }
 
-    /**
-     * We can use this method to send the updated subs back to MainActivity for uses on other screens
-     * @return allSubs
-     */
-    public List<Subscription> getUpdatedSubs() {
-        return allSubs;
+    private void updateSubscription(Subscription sub) {
+        sub.saveInBackground(e -> {
+            if(e != null) {
+                Log.e(TAG, "Error while updating", e);
+                // TODO: error handling
+            }
+            Log.d(TAG, "Subscription update was successful!");
+        });
     }
+
+    /**
+     * Several filters for the recycler view.
+     * Sort the list of subscriptions based on the filter selected.
+     * @param item - several filters
+     * @return true
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+
+            case R.id.byLowPrice:
+                if (allSubs.size() > 0) {
+                    Collections.sort(allSubs, new Comparator<Subscription>() {
+                        @Override
+                        public int compare(final Subscription object1, final Subscription object2) {
+                            if (object1.getPrice() < object2.getPrice()) {
+                                return -1;
+                            } else if (object1.getPrice() > object2.getPrice()) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.byHighPrice:
+                if (allSubs.size() > 0) {
+                    Collections.sort(allSubs, new Comparator<Subscription>() {
+                        @Override
+                        public int compare(final Subscription object1, final Subscription object2) {
+                            if (object1.getPrice() > object2.getPrice()) {
+                                return -1;
+                            } else if (object1.getPrice() < object2.getPrice()) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.byLowDays:
+                if (allSubs.size() > 0) {
+                    Collections.sort(allSubs, new Comparator<Subscription>() {
+                        @Override
+                        public int compare(final Subscription object1, final Subscription object2) {
+                            if (object1.computeRemainingDays() < object2.computeRemainingDays()) {
+                                return -1;
+                            } else if (object1.computeRemainingDays() > object2.computeRemainingDays()) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.byLateDate:
+                if (allSubs.size() > 0) {
+                    Collections.sort(allSubs, new Comparator<Subscription>() {
+                        @Override
+                        public int compare(final Subscription object1, final Subscription object2) {
+                            if (object1.getCreatedAt().after(object2.getCreatedAt())) {
+                                return -1;
+                            } else if (object1.getCreatedAt().before(object2.getCreatedAt())) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.byEarlyDate:
+                if (allSubs.size() > 0) {
+                    Collections.sort(allSubs, new Comparator<Subscription>() {
+                        @Override
+                        public int compare(final Subscription object1, final Subscription object2) {
+                            if (object1.getCreatedAt().before(object2.getCreatedAt())) {
+                                return -1;
+                            } else if (object1.getCreatedAt().after(object2.getCreatedAt())) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+//    /**
+//     * We can use this method to send the updated subs back to MainActivity for uses on other screens
+//     * @return allSubs
+//     */
+//    public List<Subscription> getUpdatedSubs() {
+//        return allSubs;
+//    }
+
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.subbed;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,10 +16,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.maltaisn.icondialog.IconDialog;
+import com.maltaisn.icondialog.IconDialogSettings;
+import com.maltaisn.icondialog.data.Icon;
+import com.maltaisn.icondialog.pack.IconPack;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -31,23 +38,28 @@ import java.util.List;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class AddSubActivity extends AppCompatActivity {
+public class AddSubActivity extends AppCompatActivity implements IconDialog.Callback {
 
     private static final String TAG = "AddSubActivity";
+    private static final String ICON_DIALOG_TAG = "icon-dialog";
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;    // for the date picker
     int mDefaultColor;      // for the color picker
     Button colorBtn;
+    Button iconBtn;
+    ImageView iconImg;
 
     EditText etSubscription;
     EditText etCost;
     TextView tvDate;
 
-    String type = "";        // let's make the default type to be monthly
+    String type = "";
 
     int next_billing_year = 0;
     int next_billing_month;
     int next_billing_day;
+
+    int icon_id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,18 @@ public class AddSubActivity extends AppCompatActivity {
 
         etSubscription = findViewById(R.id.etSubscription);
         etCost = findViewById(R.id.etCost);
+
+        iconBtn = findViewById(R.id.iconBtn);
+        iconImg = findViewById(R.id.iconImg);
+
+        // If icon dialog is already added to fragment manager, get it. If not, create a new instance.
+        IconDialog dialog = (IconDialog) getSupportFragmentManager().findFragmentByTag(ICON_DIALOG_TAG);
+        IconDialog iconDialog = dialog != null ? dialog
+                : IconDialog.newInstance(new IconDialogSettings.Builder().build());
+
+        iconBtn.setOnClickListener(v -> {
+                    // Open icon dialog
+                    iconDialog.show(getSupportFragmentManager(), ICON_DIALOG_TAG); });
 
         // select the next billing date
         tvDate = findViewById(R.id.tvDate);
@@ -97,6 +121,31 @@ public class AddSubActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    @Nullable
+    @Override
+    /**
+     * Get the IconPack
+     */
+    public IconPack getIconDialogIconPack() {
+        App newApp = new App(getApplicationContext());
+        return newApp.getIconPack();
+    }
+
+    @Override
+    /**
+     * Select an icon and load into the imageView
+     */
+    public void onIconDialogIconsSelected(@NonNull IconDialog dialog, @NonNull List<Icon> icons) {
+        for (Icon icon : icons) {
+            icon_id = icon.getId();
+            iconImg.setImageDrawable(icon.getDrawable());
+        }
+    }
+
+    @Override
+    public void onIconDialogCancelled() {}
 
 
     /**
@@ -161,9 +210,10 @@ public class AddSubActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter a valid type", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // TODO: how to update the date_difference when time passes?
-        // One solution: Swipe down to refresh the page, calling the computeRemainDays function.
+        if (icon_id == 0) {
+            Toast.makeText(this, "Please pick a valid icon", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Subscription new_sub = new Subscription();
         new_sub.setName(etSubscription.getText().toString());
@@ -171,25 +221,15 @@ public class AddSubActivity extends AppCompatActivity {
         new_sub.setPrice(Double.parseDouble(etCost.getText().toString()));
         new_sub.setColor(String.format("#%06X", (0xFFFFFF & mDefaultColor))); // convert to hex String
         new_sub.setNextBillingDate(next_billing_year, next_billing_month, next_billing_day);
+        new_sub.setIconId(icon_id);
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra("A new subscription", Parcels.wrap(new_sub));
-        saveSubscription(new_sub);
         setResult(RESULT_OK, replyIntent);
         finish();
     }
 
-    private void saveSubscription(Subscription new_sub) {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        new_sub.setUser(currentUser);
-        new_sub.saveInBackground(e -> {
-            if(e != null) {
-                Log.e(TAG, "Error while saving", e);
-                // TODO: error handling
-            }
-            Log.d(TAG, "Subscription save was successful!");
-        });
-    }
+
 
     /**
      * This method is called whenever the user chooses to navigate Up within your application's activity hierarchy from the action bar
