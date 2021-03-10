@@ -40,8 +40,8 @@
       - [ ] View total spending (by month, by year).
       - [ ] Select subscription to add from list of available subscriptions.
       - [ ] Switch from light mode to dark mode.
-      - [ ] Select different filters on the subscription screen.
-      - [ ] Apply filters to the Subscription Screen
+      - [x] Select different filters on the subscription screen.
+      - [x] Apply filters to the Subscription Screen
   - [ ] Each subscription listing’s style will match the theme of the subscription service. 
   - [x] Dots towards the bottom of the screen indicate which screen the user is on.
 
