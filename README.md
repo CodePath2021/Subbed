@@ -84,10 +84,10 @@
 ## Wireframes
 **Link to our Figma design:** https://www.figma.com/file/keeGWENYi6FWzI1sRuFCbC/Subbed?node-id=0%3A1
 
-<img src="wireframe2.png" width=800><br>
+<img src="gifs/wireframe2.png" width=800><br>
 
 ### [BONUS] Interactive Prototype
-<img src="prototype.gif" width=200>
+<img src="gifs/prototype.gif" width=200>
 
 ## Schema 
 ### Models
@@ -136,16 +136,26 @@
 
 Here's a walkthrough of implemented user stories for sprint 1:
 
-<img src='subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
-<img src='walkthrough-dashboard1.gif' title='Video Walkthrough S1' width='400' alt='Video Walkthrough Dashboard S1' />
+<img src='gifs/subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+<img src='gifs/walkthrough-dashboard1.gif' title='Video Walkthrough S1' width='400' alt='Video Walkthrough Dashboard S1' />
 
 GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
 
 ---
 Here's a walkthrough of implemented user stories for sprint 2:
 
-<img src='subbed_sprint2_2.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+<img src='gifs/subbed_sprint2_2.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
 
-<img src='walkthrough-sprint2.gif' title='Video Walkthrough S2' width='400' alt='Video Walkthrough S2' />
+<img src='gifs/walkthrough-sprint2.gif' title='Video Walkthrough S2' width='400' alt='Video Walkthrough S2' />
 
 GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
+
+---
+Here's a walkthrough of implemented user stories for sprint 3:
+
+<img src='gifs/sprint3_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+
+<img src='gifs/sprint3_2.gif' title='Video Walkthrough S2' width='400' alt='Video Walkthrough S2' />
+
+GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
+
