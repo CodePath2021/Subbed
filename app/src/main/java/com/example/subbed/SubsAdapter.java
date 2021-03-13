@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,21 +20,34 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.maltaisn.icondialog.data.Icon;
+import com.maltaisn.icondialog.pack.IconPack;
+
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
+public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> implements Filterable {
 
+    public interface OnLongClickListener {
+        void onItemLongClicked(int position);
+    }
+
+    public OnLongClickListener longClickListener;
     private Context context;
     private List<Subscription> subs;
-    private Fragment fragment;
+    private Fragment fragment;      // reference to the current fragment used for starting the update subscription activity
 
-    public SubsAdapter(Context context, List<Subscription> subs, Fragment fragment) {
+    private List<Subscription> subsCopy;    // a copy of subs, used for filtering the list by searching
+
+    public SubsAdapter(Context context, List<Subscription> subs, Fragment fragment, OnLongClickListener longClickListener) {
         this.context = context;
         this.subs = subs;
         this.fragment = fragment;
+        this.longClickListener = longClickListener;
+        subsCopy = new ArrayList<>(subs);
     }
 
     @NonNull
@@ -74,6 +90,12 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
             tvPrice.setText("$" + sub.getPrice());
             tvDays.setText(sub.computeRemainingDays() + " Days");
 
+            App newApp = new App(context);
+            IconPack pack = newApp.getIconPack();
+            Icon myIcon = pack.getIcon(sub.getIconId());
+            ivImage.setImageDrawable(myIcon.getDrawable());
+            ivImage.setColorFilter(0xFFFFFF);   // want to make the icon white, but failed
+
             String hexColor = sub.getColor();
             card.setCardBackgroundColor(Color.parseColor(hexColor));
 
@@ -83,14 +105,59 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
                 public void onClick(View v) {
                     Intent i = new Intent(context, DetailActivity.class);
                     i.putExtra("subscription", Parcels.wrap(sub));
-
-                    // some animation effect, not really useful
-//                    ActivityOptionsCompat options = ActivityOptionsCompat.
-//                            makeSceneTransitionAnimation((Activity)context, v, "profile");
-
                     fragment.startActivityForResult(i, 2);
+                }
+            });
+            // set the long clicker on each item in the recycler view
+            card.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    // Notify the listener which position was long pressed
+                    longClickListener.onItemLongClicked(getAdapterPosition());
+                    return true;
                 }
             });
         }
     }
+
+    /**
+     * Get the subscription filter that we create below
+     * @return
+     */
+    @Override
+    public Filter getFilter() {
+        return subFilter;
+    }
+
+    private Filter subFilter = new Filter() {
+        /**
+         *Perform the filtering
+         * @param constraint - the user input
+         * @return
+         */
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Subscription> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(subsCopy);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Subscription sub : subsCopy) {
+                    if (sub.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(sub);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            subs.clear();
+            subs.addAll((List)results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

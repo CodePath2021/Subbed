@@ -1,5 +1,7 @@
 package com.example.subbed;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,11 +16,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.maltaisn.icondialog.IconDialog;
+import com.maltaisn.icondialog.IconDialogSettings;
+import com.maltaisn.icondialog.data.Icon;
+import com.maltaisn.icondialog.pack.IconPack;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -26,12 +33,14 @@ import com.parse.SaveCallback;
 import org.parceler.Parcels;
 
 import java.util.Calendar;
+import java.util.List;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements IconDialog.Callback {
 
     private static final String TAG = "DetailActivity";
+    private static final String ICON_DIALOG_TAG = "icon-dialog";
     Subscription sub;
     boolean updated = false;    // keep track of whether the sub has been updated
 
@@ -59,6 +68,10 @@ public class DetailActivity extends AppCompatActivity {
 
     Button colorBtn;
     int mDefaultColor;      // for the color picker
+
+    Button iconBtn;
+    ImageView iconImg;
+    int icon_id;    // for the icon picker
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +118,49 @@ public class DetailActivity extends AppCompatActivity {
                 openColorPicker();
             }
         });
+
+        // the user can edit icon in whatever situation
+        iconBtn = findViewById(R.id.iconBtn);
+        iconImg = findViewById(R.id.iconImg);
+        IconPack pack = getIconDialogIconPack();
+        Icon myIcon = pack.getIcon(sub.getIconId());
+        iconImg.setImageDrawable(myIcon.getDrawable());     // render the previous icon
+
+        // If icon dialog is already added to fragment manager, get it. If not, create a new instance.
+        IconDialog dialog = (IconDialog) getSupportFragmentManager().findFragmentByTag(ICON_DIALOG_TAG);
+        IconDialog iconDialog = dialog != null ? dialog
+                : IconDialog.newInstance(new IconDialogSettings.Builder().build());
+
+        iconBtn.setOnClickListener(v -> {
+            // Open icon dialog
+            iconDialog.show(getSupportFragmentManager(), ICON_DIALOG_TAG); });
     }
+
+    @Nullable
+    @Override
+    /**
+     * Get the IconPack
+     */
+    public IconPack getIconDialogIconPack() {
+        App newApp = new App(getApplicationContext());
+        return newApp.getIconPack();
+    }
+
+    @Override
+    /**
+     * Select an icon and load into the imageView
+     */
+    public void onIconDialogIconsSelected(@NonNull IconDialog dialog, @NonNull List<Icon> icons) {
+        for (Icon icon : icons) {
+            icon_id = icon.getId();
+            iconImg.setImageDrawable(icon.getDrawable());
+            sub.setIconId(icon_id);
+            updated = true;
+        }
+    }
+
+    @Override
+    public void onIconDialogCancelled() {}
 
     /**
      * Open the color picker
@@ -257,21 +312,8 @@ public class DetailActivity extends AppCompatActivity {
             // send the updated subscription back to the fragment
             Intent replyIntent = new Intent();
             replyIntent.putExtra("Update subscription", Parcels.wrap(sub));
-            updateSubscription(sub);
             setResult(2, replyIntent);
         }
-    }
-
-    private void updateSubscription(Subscription sub) {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        sub.setUser(currentUser);
-        sub.saveInBackground(e -> {
-            if(e != null) {
-                Log.e(TAG, "Error while updating", e);
-                // TODO: error handling
-            }
-            Log.d(TAG, "Subscription update was successful!");
-        });
     }
 
     // TODO: A problem - using the exit button at the bottom left won't update the subscription

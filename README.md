@@ -23,14 +23,14 @@
 
 **Required Must-have Stories**
 
-  - [ ] Users can: 
-      - [ ] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
+  - [x] Users can: 
+      - [x] View and interact with a dashboard (displaying various statistics about the user's subscriptions).
       - [x] Add a subscription.
       - [x] View a list of subscriptions.
       - [x] View details of each subscription.
       - [x] Update a subscription.
       - [x] Delete a subscription.
-      - [ ] View the next billing date (on the dashboard), along with amount and associated subscription.
+      - [x] View the next billing date (on the dashboard), along with amount and associated subscription.
 
 **Optional Nice-to-have Stories**
 
@@ -40,10 +40,10 @@
       - [ ] View total spending (by month, by year).
       - [ ] Select subscription to add from list of available subscriptions.
       - [ ] Switch from light mode to dark mode.
-      - [ ] Select different filters on the subscription screen.
-      - [ ] Apply filters to the Subscription Screen
+      - [x] Select different filters on the subscription screen.
+      - [x] Apply filters to the Subscription Screen
   - [ ] Each subscription listing’s style will match the theme of the subscription service. 
-  - [ ] Dots towards the bottom of the screen indicate which screen the user is on.
+  - [x] Dots towards the bottom of the screen indicate which screen the user is on.
 
 ### 2. Screen Archetypes
 
@@ -84,10 +84,10 @@
 ## Wireframes
 **Link to our Figma design:** https://www.figma.com/file/keeGWENYi6FWzI1sRuFCbC/Subbed?node-id=0%3A1
 
-<img src="wireframe2.png" width=800><br>
+<img src="gifs/wireframe2.png" width=800><br>
 
 ### [BONUS] Interactive Prototype
-<img src="prototype.gif" width=200>
+<img src="gifs/prototype.gif" width=200>
 
 ## Schema 
 ### Models
@@ -136,14 +136,26 @@
 
 Here's a walkthrough of implemented user stories for sprint 1:
 
-<img src='subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
-<img src='walkthrough-dashboard1.gif' title='Video Walkthrough Dashboard' width='400' alt='Video Walkthrough Dashboard' />
+<img src='gifs/subbed_sprint1_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+<img src='gifs/walkthrough-dashboard1.gif' title='Video Walkthrough S1' width='400' alt='Video Walkthrough Dashboard S1' />
 
 GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
 
 ---
 Here's a walkthrough of implemented user stories for sprint 2:
 
-<img src='subbed_sprint2_2.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+<img src='gifs/subbed_sprint2_2.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+
+<img src='gifs/walkthrough-sprint2.gif' title='Video Walkthrough S2' width='400' alt='Video Walkthrough S2' />
 
 GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
+
+---
+Here's a walkthrough of implemented user stories for sprint 3:
+
+<img src='gifs/sprint3_1.gif' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+
+<img src='gifs/sprint3_2.gif' title='Video Walkthrough S2' width='400' alt='Video Walkthrough S2' />
+
+GIF created with [Kap](https://getkap.co/) and [LICEcap](https://www.cockos.com/licecap/).
+

@@ -3,12 +3,12 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="10dp">
 
     <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,7 +48,7 @@
                     android:id="@+id/price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="20dp"
                     android:text=""
                     android:hint="$10.00"
                     android:gravity="center"
@@ -63,7 +63,7 @@
                     android:gravity="center"
                     android:hint="$10.00"
                     android:inputType="numberDecimal"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="20dp"
                     android:textAllCaps="true"
                     android:textSize="40sp"
                     android:textStyle="bold" />
@@ -105,7 +105,7 @@
                     android:id="@+id/type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="20dp"
                     android:text=""
                     android:gravity="center"
                     android:textSize="40sp"
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="20dp"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -230,7 +230,63 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
-                    android:text="Pick a color"/>
+                    android:text="Change color"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--Card5-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/icon_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Icon"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/iconBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:text="Change icon" />
+
+                    <ImageView
+                        android:id="@+id/iconImg"
+                        android:layout_width="70dp"
+                        android:layout_height="60dp"/>
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search_icon"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView">
+
+    </item>
+
+    <item
+        android:id="@+id/filter"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Filter"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/byEarlyDate"
+                android:title="Added date (early to late)">
+            </item>
+            <item
+                android:id="@+id/byLateDate"
+                android:title="Added date (late to early)">
+            </item>
+            <item
+                android:id="@+id/byLowPrice"
+                android:title="Price (low to high)">
+            </item>
+            <item
+                android:id="@+id/byHighPrice"
+                android:title="Price (high to low)">
+            </item>
+            <item
+                android:id="@+id/byLowDays"
+                android:title="Remaining days (low to high)">
+            </item>
+
+        </menu>
+
+    </item>
+
+
+
+</menu>
