@@ -8,43 +8,22 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/flContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:id="@+id/tabDots"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignTop="@+id/bottom_navigation"-->
-<!--        android:layout_centerInParent="true"-->
-<!--        android:layout_marginTop="-40dp"-->
-<!--        android:background="@null"-->
-<!--        app:tabBackground="@drawable/tab_selector"-->
-<!--        app:tabGravity="center" />-->
-
-    <com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator
-        android:id="@+id/navDots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_navigation"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        app:numberOfDots="3"
-        app:selectedDotColor="@color/colorPrimary"
-        app:selectedDotIndex="1"
-        app:unselectedDotColor="@android:color/darker_gray" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu_bottom_navigation" />
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/menu_bottom_navigation"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/bottom_nav_color"/>
+
 </RelativeLayout>

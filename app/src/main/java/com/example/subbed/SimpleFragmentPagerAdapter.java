@@ -1,10 +1,8 @@
 package com.example.subbed;
 
-import android.util.Log;
-
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.subbed.Fragments.DashboardFragment;
 import com.example.subbed.Fragments.FinanceFragment;
@@ -25,16 +23,16 @@ public class SimpleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
+        Fragment fragment;
         switch(position) {
             case 0:
-                fragment = new SubscriptionFragment(subs);
+                fragment = new SubscriptionFragment(subs, this);
                 break;
             case 1:
                 fragment = new DashboardFragment(subs);
                 break;
             default:
-                return new FinanceFragment();
+                fragment = new FinanceFragment();
         }
         return fragment;
     }
@@ -47,7 +45,7 @@ public class SimpleFragmentPagerAdapter extends SmartFragmentStatePagerAdapter {
     @Override
     public int getItemPosition(Object object)
     {
-        if (object instanceof DashboardFragment)
+        if (object instanceof DashboardFragment || object instanceof SubscriptionFragment)
             return POSITION_NONE;
         return POSITION_UNCHANGED;
     }

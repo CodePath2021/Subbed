@@ -69,7 +69,7 @@ public class DashboardFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        viewPager = getActivity().findViewById(R.id.viewpager);
+        viewPager = getActivity().findViewById(R.id.viewPager);
 
         cvChart = view.findViewById(R.id.cvChart);
         pieChart = view.findViewById(R.id.piechart);
@@ -135,11 +135,10 @@ public class DashboardFragment extends Fragment {
                 // Handle this selection
                 ParseUser.logOutInBackground(e -> {
                     if(e != null) {
-                        Log.e("DashboardFragment", "Error while logging out", e);
+                        Log.e(TAG, "Error while logging out", e);
                         // TODO: error handling
                         return;
                     }
-                    Log.d("DashboardFragment", "Logged out successfully!");
                     ((MainActivity)getActivity()).goLoginActivity();
                 });
                 return true;

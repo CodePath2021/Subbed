@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -24,10 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
 
-    private BottomNavigationView bottomNavigation;
     private ViewPager viewPager;
-    private TabLayout tabLayout;
-    private DotIndicator dotIndicator;
+    private BottomNavigationView bottomNavigation;
 
     private SimpleFragmentPagerAdapter adapter;
 
@@ -46,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         subs = new ArrayList<>();
         querySubscriptions();
 
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation = findViewById(R.id.bottomNavigation);
 
         // Find the view pager that will allow the user to swipe between fragments
-        viewPager = findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewPager);
         // Create an adapter that knows which fragment should be shown on each page
         adapter = new SimpleFragmentPagerAdapter(
                 getSupportFragmentManager(),
@@ -57,11 +53,6 @@ public class MainActivity extends AppCompatActivity {
         );
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
-
-//        tabLayout = findViewById(R.id.tabDots);
-//        tabLayout.setupWithViewPager(viewPager, true);
-
-        dotIndicator = findViewById(R.id.navDots);
 
         // listener for the bottom navigation view
         bottomNavigation.setOnNavigationItemSelectedListener(item -> {
@@ -94,18 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         bottomNavigation.getMenu().findItem(R.id.action_subscription).setChecked(true);
-                        dotIndicator.setSelectedItem(0, true);
                         actionBar.setTitle("Subscriptions");
                         break;
                     case 1:
                         bottomNavigation.getMenu().findItem(R.id.action_dashboard).setChecked(true);
-                        dotIndicator.setSelectedItem(1, true);
-                        adapter.notifyDataSetChanged();
                         actionBar.setTitle("Dashboard");
                         break;
                     case 2:
                         bottomNavigation.getMenu().findItem(R.id.action_finance).setChecked(true);
-                        dotIndicator.setSelectedItem(2, true);
                         actionBar.setTitle("Finance");
                         break;
                 }
@@ -128,13 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void querySubscriptions() {
         ParseQuery<Subscription> query = ParseQuery.getQuery(Subscription.class);
-        query.include(Subscription.KEY_USER);
         query.whereEqualTo(Subscription.KEY_USER, ParseUser.getCurrentUser());
         try {
             subs.addAll(query.find());
-            for(Subscription sub : subs) {
-                Log.d(TAG, sub.getName());
-            }
         }
         catch (ParseException e) {
             Log.e(TAG, "Issue with getting subscriptions", e);

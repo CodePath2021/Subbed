@@ -132,7 +132,7 @@ public class Subscription extends ParseObject {
         int result = Days.daysBetween(today, next_billing_date).getDays();
 
         // if remaining days is 0, will set the new next billing dates and recompute remaining days
-        if (result == 0) {
+        if (result <= 0) {
 
             // monthly type
             if (getType().equals("Monthly")) {

@@ -12,28 +12,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
-
-import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.subbed.AddSubActivity;
 import com.example.subbed.R;
+import com.example.subbed.SimpleFragmentPagerAdapter;
 import com.example.subbed.SubsAdapter;
 import com.example.subbed.Subscription;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -50,6 +46,9 @@ public class SubscriptionFragment extends Fragment {
     protected SubsAdapter adapter;
     protected List<Subscription> allSubs;
 
+    // to notify ViewPager of data changes
+    private SimpleFragmentPagerAdapter pagerAdapter;
+
     // other stuff
     private FloatingActionButton addBtn;
     SubsAdapter.OnLongClickListener onLongClickListener;
@@ -58,8 +57,9 @@ public class SubscriptionFragment extends Fragment {
      * Constructor for the subscription fragment
      * @param subs - the global subscription list
      */
-    public SubscriptionFragment(List<Subscription> subs) {
+    public SubscriptionFragment(List<Subscription> subs, SimpleFragmentPagerAdapter simpleFragmentPagerAdapter) {
         allSubs = subs;
+        this.pagerAdapter = simpleFragmentPagerAdapter;
     }
 
     @Override
@@ -104,6 +104,8 @@ public class SubscriptionFragment extends Fragment {
                                 allSubs.remove(position);
                                 // notify the adapter
                                 adapter.notifyItemRemoved(position);
+                                pagerAdapter.notifyDataSetChanged();
+
                             }
                         })
                         .setNegativeButton("No", null).show();
@@ -171,6 +173,7 @@ public class SubscriptionFragment extends Fragment {
             saveSubscription(sub);
             allSubs.add(sub);
             adapter.notifyDataSetChanged();
+            pagerAdapter.notifyDataSetChanged();
         }
 
         // coming back from the DetailActivity
@@ -190,6 +193,7 @@ public class SubscriptionFragment extends Fragment {
                 }
             }
             adapter.notifyDataSetChanged();
+            pagerAdapter.notifyDataSetChanged();
         }
     }
 
@@ -323,15 +327,4 @@ public class SubscriptionFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    /**
-//     * We can use this method to send the updated subs back to MainActivity for uses on other screens
-//     * @return allSubs
-//     */
-//    public List<Subscription> getUpdatedSubs() {
-//        return allSubs;
-//    }
-
-
-
 }

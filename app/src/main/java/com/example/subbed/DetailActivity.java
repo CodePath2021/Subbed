@@ -57,6 +57,7 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
     RadioButton yearBtn;
     TextView clickableDate;
     Button finishBtn;
+    Button cancelBtn;
 
     // other stuff
     String newType = "";        // default is empty string
@@ -89,7 +90,8 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
         rdType = findViewById(R.id.rdType);
         monthBtn = findViewById(R.id.month);
         yearBtn = findViewById(R.id.year);
-        finishBtn = findViewById(R.id.button);
+        finishBtn = findViewById(R.id.btnSave);
+        cancelBtn = findViewById(R.id.btnCancel);
         clickableDate = findViewById(R.id.clickableDate);
 
         // get the corresponding subscription that the user clicked on
@@ -102,6 +104,7 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
         etPrice.setVisibility(View.GONE);
         rdType.setVisibility(View.GONE);
         finishBtn.setVisibility(View.GONE);
+        cancelBtn.setVisibility(View.GONE);
         clickableDate.setVisibility(View.GONE);
 
         // Rename the actionBar
@@ -194,6 +197,7 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
         date.setVisibility(View.GONE);
 
         finishBtn.setVisibility(View.VISIBLE);
+        cancelBtn.setVisibility(View.VISIBLE);
 
         etPrice.setVisibility(View.VISIBLE);
         etPrice.setHint(price.getText().toString().substring(1));
@@ -248,6 +252,7 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
         date.setVisibility(View.VISIBLE);
 
         finishBtn.setVisibility(View.GONE);
+        cancelBtn.setVisibility(View.GONE);
         etPrice.setVisibility(View.GONE);
         rdType.setVisibility(View.GONE);
         clickableDate.setVisibility(View.GONE);
@@ -268,6 +273,19 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
 
         // nextBillingDate has already been updated above
         date.setText(sub.getNextBillingDate());
+    }
+
+    public void cancelEdit(View view) {
+        FAB.setVisibility(View.VISIBLE);
+        price.setVisibility(View.VISIBLE);
+        type.setVisibility(View.VISIBLE);
+        date.setVisibility(View.VISIBLE);
+
+        finishBtn.setVisibility(View.GONE);
+        cancelBtn.setVisibility(View.GONE);
+        etPrice.setVisibility(View.GONE);
+        rdType.setVisibility(View.GONE);
+        clickableDate.setVisibility(View.GONE);
     }
 
     /**
