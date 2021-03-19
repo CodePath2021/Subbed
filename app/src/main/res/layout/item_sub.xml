@@ -45,11 +45,12 @@
 
             <TextView
                 android:id="@+id/tvPrice"
-                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="17dp"
-                android:text="$9.99"/>
+                android:text="$9.99"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
 
             <TextView
                 android:id="@+id/tvDays"
