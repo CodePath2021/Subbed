@@ -43,7 +43,6 @@
       - [x] Select different filters on the subscription screen.
       - [x] Apply filters to the Subscription Screen
   - [ ] Each subscription listing’s style will match the theme of the subscription service. 
-  - [x] Dots towards the bottom of the screen indicate which screen the user is on.
 
 ### 2. Screen Archetypes
 
@@ -96,31 +95,33 @@
    | Property           | Type     | Description |
    | ------------------ | -------- | ------------|
    | objectId           | String   | unique id for the subscription (default field) |
-   | subscriptionName   | String   | subscription name |
-   | theme              | String   | theme color for the subscription |
-   | type               | String   | type of subscription (e.g. monthly / yearly) |
-   | cost               | Number   | cost of the subscription |
-   | startDate          | DateTime | date when subscription began |
-   | createdAt          | DateTime | date when subscription is created (default field) |
    | updatedAt          | DateTime | date when subscription is last updated (default field) |
+   | createdAt          | DateTime | date when subscription is created (default field) |
+   | name               | String   | subscription name |
+   | type               | String   | type of subscription (e.g. Monthly / Yearly) |
+   | price              | Number   | cost of the subscription |
+   | color              | String   | theme color for the subscription |
+   | icon               | Number   | icon for the subscription |
+   | nextBillingYear    | Number   | year of the next billing date |
+   | nextBillingMonth   | Number   | month of the next billing date |
+   | nextBillingDay     | Number   | day of the next billing date |
+   | user               | Pointer  | pointer to user associated with subscription | 
    
 ### Networking
 #### List of network requests by screen
    - Main Screen (Dashboard)
       - (Read/GET) Query all subscriptions
           ```
-         ParseQuery<Sub> query = ParseQuery.getQuery(Sub.class);      
-         query.findInBackground((subs, e) -> {
-                 if (e != null) {
-                     Log.e(TAG, "Issue with getting subscriptions", e);
-                     return;
-                 }
-                 for (Sub sub : subs) {
-                     Log.i(TAG, sub.getName() + " subscription retrieved");
-                 }
-                 allSubs.addAll(subs);
-                 adapter.notifyDataSetChanged();
-         });
+        private void querySubscriptions() {
+          ParseQuery<Subscription> query = ParseQuery.getQuery(Subscription.class);
+          query.whereEqualTo(Subscription.KEY_USER, ParseUser.getCurrentUser());
+          try {
+            subs.addAll(query.find());
+          }
+          catch (ParseException e) {
+            Log.e(TAG, "Issue with getting subscriptions", e);
+          }
+        }
          ``` 
    - Subscription Screen
       - (Read/GET) Query all subscriptions
@@ -130,7 +131,6 @@
       - (Read/GET) Query all subscriptions
    - Details Screen
       - (Update/PATCH) Update an existing subscription
-      - (Delete) Delete an existing subscription
 
 ## Video Walkthrough
 
