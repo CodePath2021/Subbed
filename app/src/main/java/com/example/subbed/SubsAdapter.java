@@ -1,10 +1,8 @@
 package com.example.subbed;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +13,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.maltaisn.icondialog.data.Icon;
 import com.maltaisn.icondialog.pack.IconPack;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,8 +82,11 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> im
         public void bind(Subscription sub) {
             // Bind the post data to the view elements
             tvName.setText(sub.getName());
-            tvPrice.setText("$" + sub.getPrice());
-            tvDays.setText(sub.computeRemainingDays() + " Days");
+            tvPrice.setText(String.format("$%.2f", sub.getPrice()));
+            if(sub.computeRemainingDays() <= 1)
+                tvDays.setText(sub.computeRemainingDays() + " Day");
+            else
+                tvDays.setText(sub.computeRemainingDays() + " Days");
 
             App newApp = new App(context);
             IconPack pack = newApp.getIconPack();

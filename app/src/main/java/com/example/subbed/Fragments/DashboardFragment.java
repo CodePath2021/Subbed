@@ -93,7 +93,7 @@ public class DashboardFragment extends Fragment {
 
         cvExpensive.setOnClickListener(v -> {
             String price = "";
-            if((tvExpensiveSub.getText()).equals(mostExpensiveSub.getName())) {
+            if(tvExpensiveTitle.getText().equals("Most Expensive Subscription")) {
                 tvExpensiveTitle.setText("Least Expensive Subscription");
                 tvExpensiveSub.setText(leastExpensiveSub.getName());
                 price = String.format("$%.2f", leastExpensiveSub.getPrice());

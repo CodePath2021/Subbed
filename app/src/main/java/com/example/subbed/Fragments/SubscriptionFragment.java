@@ -1,6 +1,7 @@
 package com.example.subbed.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,12 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -93,8 +100,8 @@ public class SubscriptionFragment extends Fragment {
                 // ask for users' confirmation
                 new AlertDialog.Builder(getContext())
                         .setIcon(android.R.drawable.ic_delete)
-                        .setTitle("Are you sure?")
-                        .setMessage("Do you want to delete this item?")
+                        .setTitle("Deleting " + allSubs.get(position).getName())
+                        .setMessage("Are you sure you want to delete this item?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

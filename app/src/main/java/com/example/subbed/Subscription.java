@@ -13,8 +13,10 @@ import com.parse.ParseUser;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import java.io.Serializable;
+
 @ParseClassName("Subscription")
-public class Subscription extends ParseObject {
+public class Subscription extends ParseObject implements Serializable {
 
     public static final String KEY_NAME = "name";
     public static final String KEY_TYPE = "type";

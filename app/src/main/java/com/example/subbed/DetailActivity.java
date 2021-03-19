@@ -96,7 +96,7 @@ public class DetailActivity extends AppCompatActivity implements IconDialog.Call
 
         // get the corresponding subscription that the user clicked on
         sub = Parcels.unwrap(getIntent().getParcelableExtra("subscription"));
-        price.setText("$" + sub.getPrice());
+        price.setText(String.format("$%.2f", sub.getPrice()));
         type.setText(sub.getType());
         date.setText(sub.getNextBillingDate());
 

@@ -1,18 +1,29 @@
 package com.example.subbed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private BottomNavigationView bottomNavigation;
+    private SwipeRefreshLayout swipeContainer;
 
     private SimpleFragmentPagerAdapter adapter;
 
@@ -34,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(!isNetworkAvailable())
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+
         if(ParseUser.getCurrentUser() == null)
             goLoginActivity();
 
@@ -43,6 +58,19 @@ public class MainActivity extends AppCompatActivity {
         querySubscriptions();
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+        // Scheme colors for animation
+        swipeContainer.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
+        swipeContainer.setOnRefreshListener(() -> {
+            Log.i(TAG, "refreshing");
+            refreshSubscriptions();
+        });
 
         // Find the view pager that will allow the user to swipe between fragments
         viewPager = findViewById(R.id.viewPager);
@@ -123,5 +151,25 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Issue with getting subscriptions", e);
             // TODO: error handling
         }
+    }
+
+    private void refreshSubscriptions() {
+        ParseQuery<Subscription> query = ParseQuery.getQuery(Subscription.class);
+        query.whereEqualTo(Subscription.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground((objects, e) -> {
+            if (e != null)
+                Log.e(TAG, "Issue with refresh", e);
+            subs.clear();
+            subs.addAll(objects);
+            adapter.notifyDataSetChanged();
+            swipeContainer.setRefreshing(false);
+        });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
