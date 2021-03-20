@@ -106,7 +106,7 @@ public class DashboardFragment extends Fragment {
                 tvExpensiveTitle.setText("Most Expensive Subscription");
                 tvExpensiveSub.setText(mostExpensiveSub.getName());
                 price = String.format("$%.2f", mostExpensiveSub.getPrice());
-                if(mostExpensiveSub.getType() == "Monthly")
+                if(mostExpensiveSub.getType().equals("Monthly"))
                     tvExpensiveCost.setText(price + " per month");
                 else
                     tvExpensiveCost.setText(price + " per year");
