@@ -167,7 +167,7 @@ public class DashboardFragment extends Fragment {
 
         for(Subscription sub : subs) {
             price = sub.getPrice();
-            if(price > mostExpensiveCost) {
+            if(price >= mostExpensiveCost) {
                 mostExpensiveCost = price;
                 mostExpensiveSub = sub;
             }
@@ -182,7 +182,7 @@ public class DashboardFragment extends Fragment {
 
         for(Subscription sub : subs) {
             price = sub.getPrice();
-            if(price < leastExpensiveCost) {
+            if(price <= leastExpensiveCost) {
                 leastExpensiveCost = price;
                 leastExpensiveSub = sub;
             }
@@ -198,7 +198,7 @@ public class DashboardFragment extends Fragment {
 
         for(Subscription sub : subs) {
             days = sub.computeRemainingDays();
-            if(days < nearestBillingDate) {
+            if(days <= nearestBillingDate) {
                 nearestBillingDate = days;
                 nextBillingSub = sub;
             }

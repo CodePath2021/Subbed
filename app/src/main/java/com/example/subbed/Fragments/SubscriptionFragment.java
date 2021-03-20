@@ -83,6 +83,19 @@ public class SubscriptionFragment extends Fragment {
         setHasOptionsMenu(true);
 
         rvSubs = view.findViewById(R.id.rvSubs);
+        rvSubs.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy < 0) {
+                    addBtn.show();
+
+                } else if (dy > 0) {
+                    addBtn.hide();
+                }
+            }
+        });
+
+
         addBtn = view.findViewById(R.id.addBtn);
         // add a new subscription
         addBtn.setOnClickListener(new View.OnClickListener() {
